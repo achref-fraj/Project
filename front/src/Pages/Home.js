@@ -1,12 +1,16 @@
-
-import ShapeExample from '../components/Product';
 import AppAbout from '../components/about';
 import AppContact from '../components/contact';
 import Example from '../components/filter';
-
 import AppHero from '../components/hero';
 import AppLook from '../components/look';
 import Main from '../components/main';
+import Item from './item';
+import Panier from './panier';
+
+
+
+
+
 
 const Home = () => {
   return (
@@ -16,8 +20,12 @@ const Home = () => {
       <Main/>
       <AppLook/>
       <Example/>
-      <ShapeExample/>
+      <Item/>
+      <Panier/>
       <AppContact/>
+      
+      
+    
     
     </>
   )

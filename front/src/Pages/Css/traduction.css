@@ -1,0 +1,25 @@
+#google_translate_element {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* To hide the Google Translate branding */
+  .goog-te-gadget-simple {
+    border: none !important;
+    background-color: transparent !important;
+  }
+  
+  .goog-te-gadget-simple a.goog-te-menu-value:hover {
+    text-decoration: none !important;
+  }
+  
+  .goog-te-gadget-simple .goog-te-menu-value {
+    padding: 5px;
+    display: inline-block;
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .goog-te-gadget-simple .goog-te-menu-frame {
+    border: none !important;
+  }

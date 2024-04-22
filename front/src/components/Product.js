@@ -1,94 +1,74 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import img1 from '../images/enfant1.jpg';
-import img2 from '../images/enfant2.jpg';
-import img3 from '../images/enfant3.jpg';
-import img4 from '../images/enfant4.jpg';
-import img5 from '../images/fille1.jpg';
-import img6 from '../images/fille2.jpg';
-import img7 from '../images/fille3.jpg';
-import img8 from '../images/fille4.jpg';
-import img9 from '../images/men1.jpg';
-import img10 from '../images/men2.jpg';
-import img11 from '../images/men3.jpg';
-import img12 from '../images/men4.jpg';
-import img13 from '../images/men5.jpg';
-import img14 from '../images/men6.jpg';
-import img15 from '../images/women1.jpg';
-import img16 from '../images/women2.jpg';
-import img17 from '../images/women3.jpg';
-import img18 from '../images/women4.jpg';
-import img19 from '../images/women5.jpg';
-import img20 from '../images/women6.jpg';
-import img21 from '../images/women11.jpg';
-import img22 from '../images/women12.jpg';
-import img23 from '../images/women21.jpg';
-import img24 from '../images/women22.jpg';
-import '../Pages/Css/product.css'; // Import the CSS file
+import React from 'react'
+import HoverImage from 'react-hover-image/build';
+import { useDispatch, useSelector } from "react-redux";
+import { add, remove } from "./redux/Slice/CartSlice";
+import { price } from "./redux/Slice/TotalPrice";
+import { toast } from "react-hot-toast";
 
-const ImageToggleOnMouseOver = ({ primaryImg, secondaryImg, model, price }) => {
-  const imageRef = useRef(null);
+const Product = ({post}) => {
+    const { cart } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  return (
-    <Link to={'/Carte'}>
-      <div className="image-toggle-container">
-        <img
-          className="image-toggle"
-          onMouseOver={() => {
-            imageRef.current.src = secondaryImg;
-          }}
-          onMouseOut={() => {
-            imageRef.current.src = primaryImg;
-          }}
-          src={primaryImg}
-          alt=""
-          ref={imageRef}
-        />
-        <div className="image-info">
-          <p>{model}</p>
-          <p>{price}</p>
-        </div>
+  const addToCart = () => {
+    dispatch(add(post));
+    dispatch(price(post.price));
+    toast.success("Item added to Cart");
+  }
+
+
+  const removeFromCart = () => {
+    dispatch(remove(post.id));
+    dispatch(price(-post.price));
+    toast.error("Item removed from Cart");
+  }
+
+return (
+    <div className="flex flex-col items-center justify-between 
+    hover:scale-110 transition duration-300 ease-in gap-3 p-4 mt-10 ml-5 rounded-xl outline">
+      <div>
+        <p className="text-gray-700 font-semibold text-lg text-left truncate w-40 mt-1">{post.type}</p>
       </div>
-    </Link>
-  );
-};
+   
+      <div className="h-[200px]">
+      <HoverImage
+  src={post.primaryImage}
+  hoverSrc={post.hoverImg}
+  style={{ width: "250px", height: "250px" }}
+  className="image"
+/>
 
-function ShapeExample() {
-  return (
-    <div className="product-container">
-      <h1 className="product-title">Product</h1>
-      <div className="image-row">
-        <div className="image-group-1">
-          <ImageToggleOnMouseOver primaryImg={img2} secondaryImg={img1} model="Model 1" price="price: $504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img15} secondaryImg={img16} model="Model 2" price="price: $70" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img9} secondaryImg={img10} model="Model 3" price="price: $504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img5} secondaryImg={img6} model="Model 4" price="price: $70" alt="" />
+
+
+      </div>
+
+      <div className="flex justify-between gap-12 items-center w-full mt-5">
+        <div>
+          <p className="text-black-600 font-semibold">${post.price}</p>
         </div>
-        <div className="image-group-2">
-          <ImageToggleOnMouseOver primaryImg={img17} secondaryImg={img18} model="Model 5" price="price: $504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img11} secondaryImg={img12} model="Model 6" price="price: $70" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img7} secondaryImg={img8} model="Model 7" price="price: $504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img3} secondaryImg={img4} model="Model 8" price="price: $70" alt="" />
-        </div>
-        
-        <div className="image-group-3">
-          <ImageToggleOnMouseOver primaryImg={img13} secondaryImg={img14} model="Model 9" price="$504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img19} secondaryImg={img20} model="Model 10" price="$70" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img21} secondaryImg={img22} model="Model 11" price="$504" alt="" />
-          &nbsp; &nbsp; &nbsp;
-          <ImageToggleOnMouseOver primaryImg={img23} secondaryImg={img24} model="Model 12" price="$70" alt="" />
-        </div>
+
+        {
+          cart.some((p) => p.id === post.id) ?
+            (<button
+              className="text-black-700 border-2 border-black-700 rounded-full font-semibold 
+          text-[12px] p-1 px-3 uppercase 
+          hover:bg-black-700
+          hover:text-white transition duration-300 ease-in"
+              onClick={removeFromCart}>
+              Remove Item
+            </button>) :
+            (<button
+              className="text-black-700 border-2 border-black-700 rounded-full font-semibold 
+          text-[12px] p-1 px-3 uppercase 
+          hover:bg-red-700
+          hover:text-white transition duration-300 ease-in"
+              onClick={addToCart}>
+              Add to Cart
+            </button>)
+        }
       </div>
     </div>
   );
-}
+};
 
-export default ShapeExample;
+
+export default Product;
